@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.timmitof.album.database.entity.Image
 import com.timmitof.album.databinding.ItemPhotosBinding
 
-class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ImageViewHolder>() {
+class GalleryAdapter(private val deleteListener: (Image) -> Unit): RecyclerView.Adapter<GalleryAdapter.ImageViewHolder>() {
 
     private var data = listOf<Image>()
 
@@ -23,6 +23,9 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ImageViewHolder>() {
         with(holder) {
             Glide.with(holder.itemView).load(item.image).into(binding.imageView)
             binding.title.text = "${item.date?.time}"
+            binding.imageView.setOnClickListener {
+                deleteListener.invoke(item)
+            }
         }
     }
 

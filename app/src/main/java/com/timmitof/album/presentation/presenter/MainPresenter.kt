@@ -2,6 +2,7 @@ package com.timmitof.album.presentation.presenter
 
 import android.util.Log
 import android.widget.Toast
+import com.timmitof.album.database.entity.Image
 import com.timmitof.album.domain.repository.GalleryRepository
 import com.timmitof.album.presentation.mvpview.IMainView
 import io.reactivex.Scheduler
@@ -35,6 +36,10 @@ class MainPresenter : MvpPresenter<IMainView>() {
                     Log.e("GetImageError", error.message ?: "Unknown error")
                     viewState.showToast("Error fetching images: ${error.message}")
                 }
-            )
+            ).isDisposed
+    }
+
+    fun deleteImage(image: Image) {
+        galleryRepository.deleteImage(image)
     }
 }

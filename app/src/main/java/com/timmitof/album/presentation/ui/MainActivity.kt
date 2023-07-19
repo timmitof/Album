@@ -23,7 +23,10 @@ class MainActivity : MvpAppCompatActivity(), IMainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        adapter = GalleryAdapter()
+        adapter = GalleryAdapter {
+            presenter.deleteImage(it)
+            adapter.notifyDataSetChanged()
+        }
         binding.recyclerPhotos.adapter = adapter
         setContentView(binding.root)
         setupListeners()

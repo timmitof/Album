@@ -12,4 +12,8 @@ class GalleryRepository(private val galleryDao: GalleryDao) {
     fun addImage(image: Image) {
         galleryDao.addImage(image)
     }
+
+    fun deleteImage(image: Image) {
+        galleryDao.deleteImage(image)
+    }
 }

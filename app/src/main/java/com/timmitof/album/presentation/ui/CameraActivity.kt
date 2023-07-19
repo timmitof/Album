@@ -1,29 +1,29 @@
 package com.timmitof.album.presentation.ui
 
 import android.Manifest.permission.CAMERA
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import com.arellomobile.mvp.MvpAppCompatActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.permissionx.guolindev.PermissionX
 import com.timmitof.album.databinding.ActivityCameraBinding
-import com.timmitof.album.domain.repository.GalleryRepository
 import com.timmitof.album.presentation.mvpview.ICameraView
 import com.timmitof.album.presentation.presenter.CameraPresenter
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
 private val REQUIRED_PERMISSIONS = listOf(CAMERA)
 
@@ -31,7 +31,8 @@ class CameraActivity : MvpAppCompatActivity(), ICameraView {
 
     private lateinit var binding: ActivityCameraBinding
 
-    var presenter: CameraPresenter = CameraPresenter(null)
+    @InjectPresenter
+    lateinit var presenter: CameraPresenter
 
     lateinit var imageCapture: ImageCapture
 
@@ -87,7 +88,7 @@ class CameraActivity : MvpAppCompatActivity(), ICameraView {
             ContextCompat.getMainExecutor(this),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    presenter.savePhoto(url = outputFileResults.savedUri)
+                    presenter.savePhoto(image = outputFileResults.savedUri?.toBitmap())
                 }
 
                 override fun onError(e: ImageCaptureException) {
@@ -105,5 +106,13 @@ class CameraActivity : MvpAppCompatActivity(), ICameraView {
             ".jpg",
             storageDir
         )
+    }
+
+    override fun showToast(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun Uri.toBitmap(): Bitmap {
+        return MediaStore.Images.Media.getBitmap(getContentResolver(), this)
     }
 }

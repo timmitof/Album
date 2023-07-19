@@ -21,7 +21,7 @@ class GalleryAdapter: RecyclerView.Adapter<GalleryAdapter.ImageViewHolder>() {
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val item = data[position]
         with(holder) {
-            Glide.with(holder.itemView).load(item.url).centerCrop().into(binding.imageView)
+            Glide.with(holder.itemView).load(item.image).into(binding.imageView)
             binding.title.text = "${item.date?.time}"
         }
     }

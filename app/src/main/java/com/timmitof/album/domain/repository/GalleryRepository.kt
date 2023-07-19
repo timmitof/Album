@@ -1,16 +1,13 @@
 package com.timmitof.album.domain.repository
 
+import android.database.Observable
 import com.timmitof.album.database.dao.GalleryDao
 import com.timmitof.album.database.entity.Image
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
-import javax.inject.Singleton
+import io.reactivex.Flowable
 
 class GalleryRepository(private val galleryDao: GalleryDao) {
 
-    fun getAllImages(): List<Image>? = galleryDao.getAllImages()
+    fun getAllImages(): Flowable<List<Image>?> = galleryDao.getAllImages()
 
     fun addImage(image: Image) {
         galleryDao.addImage(image)

@@ -7,7 +7,7 @@ import com.timmitof.album.database.entity.Coordinate
 import com.timmitof.album.database.entity.Image
 
 @Database(
-    entities = [Image::class, Coordinate::class],
+    entities = [Image::class],
     version = 1,
     exportSchema = false
 )

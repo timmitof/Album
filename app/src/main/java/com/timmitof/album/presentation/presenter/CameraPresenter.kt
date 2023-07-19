@@ -1,25 +1,34 @@
 package com.timmitof.album.presentation.presenter
 
+import android.database.Observable
+import android.graphics.Bitmap
 import android.net.Uri
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+import android.provider.MediaStore
 import com.timmitof.album.database.entity.Coordinate
 import com.timmitof.album.database.entity.Image
 import com.timmitof.album.domain.repository.GalleryRepository
 import com.timmitof.album.presentation.mvpview.ICameraView
+import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import moxy.InjectViewState
+import moxy.MvpPresenter
+import org.koin.java.KoinJavaComponent.inject
 import java.util.Date
-import javax.inject.Inject
 
 @InjectViewState
-class CameraPresenter @Inject constructor(private val galleryRepository: GalleryRepository?) : MvpPresenter<ICameraView>() {
+class CameraPresenter : MvpPresenter<ICameraView>() {
 
-    fun savePhoto(url: Uri?) {
+    private val galleryRepository: GalleryRepository by inject(GalleryRepository::class.java)
+
+    fun savePhoto(image: Bitmap?) {
         val image = Image(
-            url = url,
+            image = image,
             date = Date(),
             coordinate = Coordinate(longitude = 0f, latitude = 0f),
             id = null
         )
-        galleryRepository?.addImage(image)
+
+        galleryRepository.addImage(image)
     }
 }

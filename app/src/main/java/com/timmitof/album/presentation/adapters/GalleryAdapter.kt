@@ -23,7 +23,7 @@ class GalleryAdapter(private val deleteListener: (Image) -> Unit): RecyclerView.
         with(holder) {
             Glide.with(holder.itemView).load(item.image).into(binding.imageView)
             binding.title.text = "${item.date?.time}"
-            binding.imageView.setOnClickListener {
+            binding.deleteBtn.setOnClickListener {
                 deleteListener.invoke(item)
             }
         }

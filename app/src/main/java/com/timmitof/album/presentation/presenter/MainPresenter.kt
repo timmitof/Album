@@ -23,7 +23,6 @@ class MainPresenter : MvpPresenter<IMainView>() {
     }
 
     fun getAllImages() {
-        Log.e("GetImage", "GET IMAGE")
         galleryRepository.getAllImages()
             .observeOn(Schedulers.io())
             .subscribeOn(Schedulers.io())
@@ -33,8 +32,7 @@ class MainPresenter : MvpPresenter<IMainView>() {
                     viewState.setImages(images)
                 },
                 { error ->
-                    Log.e("GetImageError", error.message ?: "Unknown error")
-                    viewState.showToast("Error fetching images: ${error.message}")
+                    viewState.showToast("Error: ${error.message}")
                 }
             ).isDisposed
     }

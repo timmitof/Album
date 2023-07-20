@@ -18,33 +18,26 @@ class MainActivity : MvpAppCompatActivity(), IMainView {
     @InjectPresenter
     lateinit var presenter: MainPresenter
 
-    lateinit var adapter: GalleryAdapter
+    private val adapter: GalleryAdapter by lazy { GalleryAdapter(onDeleteClick) }
+    private lateinit var onDeleteClick: (Image) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        adapter = GalleryAdapter {
-            presenter.deleteImage(it)
-            adapter.notifyDataSetChanged()
-        }
-        binding.recyclerPhotos.adapter = adapter
         setContentView(binding.root)
         setupListeners()
     }
 
+    override fun setImages(list: List<Image>?) { adapter.addList(list) }
+
+    override fun showToast(message: String?) { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+
     private fun setupListeners() {
+        onDeleteClick = { presenter.deleteImage(it) }
+        binding.recyclerPhotos.adapter = adapter
+
         binding.cameraBtn.setOnClickListener {
             startActivity(Intent(this, CameraActivity::class.java))
         }
-    }
-
-    override fun setImages(list: List<Image>?) {
-        Log.e("Images", "Images: $list")
-        adapter.addList(list)
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun showToast(message: String?) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
